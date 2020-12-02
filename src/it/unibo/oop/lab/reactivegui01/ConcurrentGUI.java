@@ -23,6 +23,7 @@ public final class ConcurrentGUI extends JFrame {
     private static final double HEIGHT_PERC = 0.1;
     private final JLabel display = new JLabel();
     private final JButton stop = new JButton("stop");
+    private final JButton start = new JButton("start");
 
     /**
      * Builds a new CGUI.
@@ -34,6 +35,7 @@ public final class ConcurrentGUI extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         final JPanel panel = new JPanel();
         panel.add(display);
+        panel.add(start);
         panel.add(stop);
         this.getContentPane().add(panel);
         this.setVisible(true);
@@ -44,21 +46,18 @@ public final class ConcurrentGUI extends JFrame {
          */
         final Agent agent = new Agent();
         new Thread(agent).start();
+        
+        start.addActionListener(e -> {
+                agent.startCounting();
+            
+        });
+        
         /*
          * Register a listener that stops it
          */
-        stop.addActionListener(new ActionListener() {
-            /**
-             * event handler associated to action event on button stop.
-             * 
-             * @param e
-             *            the action event that will be handled by this listener
-             */
-            @Override
-            public void actionPerformed(final ActionEvent e) {
+        stop.addActionListener(e -> {
                 // Agent should be final
                 agent.stopCounting();
-            }
         });
     }
 
@@ -106,6 +105,10 @@ public final class ConcurrentGUI extends JFrame {
          */
         public void stopCounting() {
             this.stop = true;
+        }
+        
+        public void startCounting() {
+            this.stop = false;
         }
     }
 }
